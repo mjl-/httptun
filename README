@@ -1,0 +1,27 @@
+tunnel a tcp connection through http.
+
+the idea is to run a special httpd on a machine that has normal
+internet access.  a http client will connect to that httpd, perhaps
+from behind a firewall.  the client will make a POST request in
+"chunked" transfer-encoding mode, a header "destination" indicates
+the address the special httpd should connect the client to.  whenever
+the clients tcp connection sends data, a chunk with that data is
+sent over the chunked POST connection.  the remote server does the
+same, so responds in "chunked" transfer-encoding.  keep-alive
+messages are sent by both ends to make sure proxies do not think
+the connections are idle and shut them down.  keep-alive messages
+are 1-byte chunks (content ignored), for all other chunks the first
+byte is the same as for a keep-alive message and must be ignored.
+
+this scheme works when there is no proxy forwarding the http
+request/response.  a chunked post seems legitimate when reading the
+rfc.  however, it seems the proxies tested (squid, polipo, tinyproxy)
+cannot handle chunked posts.  i see no reason why they shouldn't.
+
+example usage:
+
+on a server:
+listen -A net!*!8888 httpsrv.dis
+
+on a client;
+mount -A {httpdial net!remoteserver!8888 net!remote!styx} /n/remote
