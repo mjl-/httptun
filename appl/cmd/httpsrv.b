@@ -50,7 +50,7 @@ init(nil: ref Draw->Context, args: list of string)
 	(req, err) := Req.read(b);
 	if(err != nil)
 		return error(outfd, "400", "bad request", "could not parse request: "+err);
-	if(req.method != POST || req.version != HTTP_11 || !req.h.has("Transfer-Encoding", "chunked"))
+	if(req.method != POST || req.major != 1 || req.minor != 1 || !req.h.has("Transfer-Encoding", "chunked"))
 		return error(outfd, "400", "bad request", "either not a post request, not http/1.1 or not chunked transfer-encoding");
 	(has, destaddr) := req.h.find("Destination");
 	if(!has)
@@ -61,7 +61,7 @@ init(nil: ref Draw->Context, args: list of string)
 
 	h := Hdrs.new(nil);
 	h.set("Transfer-Encoding", "chunked");
-	resp := ref Resp(HTTP_11, "200", "Fine by me", h);
+	resp := Resp.mk(HTTP_11, "200", "Fine by me", h);
 	err = resp.write(outfd);
 	if(err != nil)
 		return say("writing response: "+err);
@@ -76,7 +76,7 @@ include "chunk.b";
 
 error(fd: ref Sys->FD, st, stmsg, body: string)
 {
-	resp := ref Resp(HTTP_11, st, stmsg, Hdrs.new(("Connection", "close")::nil));
+	resp := Resp.mk(HTTP_11, st, stmsg, Hdrs.new(("Connection", "close")::nil));
 	err := resp.write(fd);
 	if(err != nil)
 		return say("writing error response: "+err);

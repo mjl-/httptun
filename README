@@ -1,3 +1,11 @@
+# status
+
+works in theory, but not that useful since _sending_ requests with
+chunked bodies seems to be unimplemented by populair proxies...
+
+
+# intro
+
 tunnel a tcp connection through http.
 
 the idea is to run a special httpd on a machine that has normal
@@ -18,10 +26,33 @@ request/response.  a chunked post seems legitimate when reading the
 rfc.  however, it seems the proxies tested (squid, polipo, tinyproxy)
 cannot handle chunked posts.  i see no reason why they shouldn't.
 
+
+# install
+
+this software needs package "web" to compile.
+
+first, ensure a "mkconfig" file is present.  a bind/symlink to the
+mkconfig of your inferno install should do.  now "mk" and "mk
+install" to compile and install the files.
+
+
+# download
+
+see http://www.ueber.net/code/r/httptun for instructions.
+
+
+# example
+
 example usage:
 
 on a server:
-listen -A net!*!8888 httpsrv.dis
+	listen -A net!*!8888 httpsrv.dis
 
 on a client;
-mount -A {httpdial net!remoteserver!8888 net!remote!styx} /n/remote
+	mount -A {httpdial net!remoteserver!8888 net!remote!styx} /n/remote
+
+
+# licence & author
+
+this code is in the public domain, written by mechiel lukkien,
+reachable at mechiel@ueber.net or mechiel@xs4all.nl.

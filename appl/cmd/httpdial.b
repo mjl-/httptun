@@ -55,7 +55,8 @@ init(nil: ref Draw->Context, args: list of string)
 	h.set("Transfer-Encoding", "chunked");
 	h.set("Destination", destaddr);
 	h.set("Content-Type", "text/plain");
-	req := ref Req(POST, u, HTTP_11, h, nil, proxyaddr);
+	req := Req.mk(POST, u, HTTP_11, h);
+	req.proxyaddr = proxyaddr;
 
 	(fd, derr) := req.dial();
 	if(derr != nil)
