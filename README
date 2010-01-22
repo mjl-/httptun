@@ -27,18 +27,23 @@ rfc.  however, it seems the proxies tested (squid, polipo, tinyproxy)
 cannot handle chunked posts.  i see no reason why they shouldn't.
 
 
-# install
-
-this software needs package "web" to compile.
-
-first, ensure a "mkconfig" file is present.  a bind/symlink to the
-mkconfig of your inferno install should do.  now "mk" and "mk
-install" to compile and install the files.
-
-
 # download
 
-see http://www.ueber.net/code/r/httptun for instructions.
+get the latest version at:
+
+	http://www.ueber.net/code/r/httptun
+
+
+# install
+
+first, make sure you have "web" installed, see
+http://www.ueber.net/code/r/web.
+
+make sure you have $ROOT set, then run "mk" to compile and
+"mk install" to install the files.
+
+when building from within inferno, insert SYSHOST=Inferno and ROOT=
+in the mk invocations to override the values in the mkconfig.
 
 
 # example
